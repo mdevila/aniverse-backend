@@ -106,6 +106,19 @@ module.exports = async (req, res) => {
       return res.send(Buffer.from(response.data));
     }
 
+    // ---- Debug ----
+    if (url === '/debug') {
+      const fs = require('fs');
+      const paths = ['/usr/bin/chromium-browser', '/usr/bin/chromium', '/usr/bin/google-chrome', '/usr/bin/google-chrome-stable'];
+      const found = paths.filter(p => fs.existsSync(p));
+      return res.json({
+        videoExtractorLoaded: !!videoExtractor,
+        chromeFound: found,
+        chromePath: process.env.CHROME_PATH || 'not set',
+        nodeVersion: process.version,
+      });
+    }
+
     // ---- 404 ----
     return res.status(404).json({ error: 'Not found', path: url });
   } catch (e) {
