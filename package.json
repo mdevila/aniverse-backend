@@ -8,6 +8,7 @@
     "test": "node test-api.js"
   },
   "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
     "axios": "^1.7.0",
     "axios-cookiejar-support": "^4.0.7",
     "cheerio": "^1.0.0",
