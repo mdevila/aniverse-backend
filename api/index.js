@@ -4,8 +4,12 @@ const mangakatana = require('../lib/mangakatana');
 const music = require('../lib/music');
 const axios = require('axios');
 
+// video-extractor uses puppeteer (devDependency) — only available locally
 let videoExtractor = null;
-try { videoExtractor = require('../lib/video-extractor'); } catch {}
+try {
+  const hasPuppeteer = require.resolve('puppeteer-core');
+  if (hasPuppeteer) videoExtractor = require('../lib/video-extractor');
+} catch {}
 
 module.exports = async (req, res) => {
   // CORS
