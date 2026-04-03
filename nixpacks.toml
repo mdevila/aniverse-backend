@@ -1,6 +1,0 @@
-[phases.setup]
-aptPkgs = ["chromium"]
-
-[variables]
-CHROME_PATH = "/usr/bin/chromium"
-PUPPETEER_SKIP_DOWNLOAD = "true"
