@@ -78,6 +78,15 @@ module.exports = async (req, res) => {
       if (!q.id) return res.status(400).json({ error: '"id" required' });
       return res.json(await music.getConversionStatus(q.id));
     }
+    if (url === '/music/test-ytdl') {
+      if (!q.id) return res.status(400).json({ error: '"id" required' });
+      try {
+        const audio = await music.extractAudioUrl(q.id);
+        return res.json({ ok: true, audio });
+      } catch (e) {
+        return res.json({ ok: false, error: e.message, stack: e.stack?.split('\n').slice(0, 5) });
+      }
+    }
     if (url === '/music/download') {
       if (!q.id) return res.status(400).json({ error: '"id" required' });
       const downloadUrl = await music.fastConvert(q.id);
