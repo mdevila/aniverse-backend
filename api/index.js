@@ -4,12 +4,11 @@ const mangakatana = require('../lib/mangakatana');
 const music = require('../lib/music');
 const axios = require('axios');
 
-// video-extractor uses puppeteer (devDependency) — only available locally
+// video-extractor uses puppeteer (devDependency) — only available locally, not on Vercel
 let videoExtractor = null;
-try {
-  const hasPuppeteer = require.resolve('puppeteer-core');
-  if (hasPuppeteer) videoExtractor = require('../lib/video-extractor');
-} catch {}
+if (process.env.LOCAL_DEV) {
+  try { videoExtractor = require('../lib/video-extractor.local'); } catch {}
+}
 
 module.exports = async (req, res) => {
   // CORS
