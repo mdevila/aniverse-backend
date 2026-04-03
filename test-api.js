@@ -3,16 +3,20 @@ const BASE = process.argv[2] || 'http://localhost:3690';
 
 async function test(name, url) {
   const start = Date.now();
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000);
   try {
-    const res = await fetch(`${BASE}${url}`);
+    const res = await fetch(`${BASE}${url}`, { signal: controller.signal });
+    clearTimeout(timeout);
     const elapsed = Date.now() - start;
-    const data = await res.json();
+    const text = await res.text();
     const ok = res.ok;
-    const preview = JSON.stringify(data).slice(0, 150);
+    const preview = text.slice(0, 150);
     console.log(`${ok ? 'PASS' : 'FAIL'} [${elapsed}ms] ${name}`);
     console.log(`  ${res.status} ${preview}...\n`);
     return { name, ok, elapsed };
   } catch (e) {
+    clearTimeout(timeout);
     const elapsed = Date.now() - start;
     console.log(`FAIL [${elapsed}ms] ${name}`);
     console.log(`  Error: ${e.message}\n`);
